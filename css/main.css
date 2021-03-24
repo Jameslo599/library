@@ -1,3 +1,6 @@
+body {
+    text-align: center;
+}
 .modal {
     display: none;
     position: fixed;
@@ -12,19 +15,31 @@
 }
 .formContent {
     background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
+    margin: 5% auto;
+    padding: 40px;
     border: 1px solid #888;
-    width: 80%;
+    width: 30%;
+    line-height: 50px;
+    text-align: center;
 }
-.formContent input[type = text] {
-    width: 100%;
+
+.formContent input[type = text] [type = number] {
     padding: 15px;
     margin: 5px 0 22px 0;
     border: none;
     background: #f1f1f1;
 }
+
+.formContent input[type = number] {
+    width: 100px;
+}
+
 .formContent input[type = text]:focus {
+    background-color: #ddd;
+    outline:none;
+}
+
+.formContent input[type = number]:focus {
     background-color: #ddd;
     outline:none;
 }
@@ -41,4 +56,17 @@
     color: rgb(165, 0, 0);
     text-decoration: none;
     cursor: pointer;
+}
+
+#bookHolder {
+    display: grid;
+    
+    grid-template-areas: 
+        ". . . ."
+        ". . . ."
+        ". . . .";
+    column-gap: 60px;
+    row-gap: 60px;
+    -ms-grid-row-align: center;
+    -ms-grid-column-align: center;
 }

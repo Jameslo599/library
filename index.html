@@ -9,6 +9,7 @@
     <header>
         <link href="css/normalize.css" rel="stylesheet" type="text/css" media="all">
         <link href="css/main.css" rel="stylesheet" type="text/css" media="all">
+        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
     </header>
     <div id = "titles">
         <h1>Library</h1>
@@ -19,16 +20,22 @@
         </button>
     </div>
     <div id = "modalContainer" class = "modal">
-        <form class = "formContent">
-            <span class = "close">lorem ipsum</span>
-        <h1>New Book</h1>
-
-
-        <label for = "author">Author</label>
-        <input type = "text" placeholder = "Enter Author" name = "author" required>
+        <form id = "form" class = "formContent">
+            <span class = "close"><i class="fas fa-times"></i></span>
+        <h1>New Book Entry</h1>
+        <input type = "text" id = "author" placeholder = "Enter Author Name" name = "author" required>
+        <br>
+        <input type = "text" id = "title" placeholder = "Enter Book Title" name = "title" required>
+        <br>
+        <input type = "number" id = "pages" placeholder = "Total Pages" name = "pages" min = "1" max = "10000" required>
+        <br>
+        <label for = "completion">Completed?</label>
+        <input type = "checkbox" name = "completion">
+        <br>
+        <input type = "submit" name = "submission">
         </form>
     </div>
-    <div id = "bookContainer"></div>
+    <section id = "bookHolder"></section>
 </body>
 <script src="script.js"></script>
 </html>
