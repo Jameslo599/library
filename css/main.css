@@ -60,13 +60,40 @@ body {
 
 #bookHolder {
     display: grid;
-    
+    position: static;
     grid-template-areas: 
         ". . . ."
         ". . . ."
         ". . . .";
     column-gap: 60px;
     row-gap: 60px;
+    grid-template-columns: 24%;
     -ms-grid-row-align: center;
     -ms-grid-column-align: center;
+}
+
+.book {
+    border-style: solid;
+    position: static;
+    
+}
+
+#bookHolder h2, p{ 
+    overflow: auto;
+}
+
+#bookHolder #exitButton {
+    position: relative;
+    float: right;
+    bottom: 4em;
+    right: 1em;
+    color: rgb(231, 0, 0);
+    
+}
+
+#exitButton:hover,
+#exitButton:focus {
+    color: rgb(165, 0, 0);
+    text-decoration: none;
+    cursor: pointer;
 }
