@@ -2,20 +2,35 @@
 let myLibrary = [];
 
 //Object initializer with properties
-function Book(author, title, pages) {
+function Book(author, title, pages, read) {
     this.author = author;
     this.title = title;
     this.pages = pages;
+    this.read = read;
 }
 
 //Pushes user-inputted info to initialize and display new object
 let form = document.getElementById("form");
+let checkBox = document.getElementById("mainBox");
+let readValue = 'unread';
+let readBook = document.getElementById("switch");
+readBook.onclick = function() {
+    readValue = "read";
+}
+
+
 function submitForm(event) {
     event.preventDefault();
     let author = document.getElementById("author").value;
     let title = document.getElementById("title").value;
     let pages = document.getElementById("pages").value;
-    let submission = new Book(author, title, pages);
+    if (checkBox.checked == false) {
+        readValue = "unread";
+    } else if (checkBox.checked == true) {
+        readValue = "read";
+    }
+    let read = readValue;
+    let submission = new Book(author, title, pages, read);
     myLibrary.push(submission);
     showBooks();
 }
@@ -32,34 +47,56 @@ function showBooks() {
       const myPara1 = document.createElement('p');
       const myPara2 = document.createElement('p');
       const myExit = document.createElement('i');
-      myExit.id = "exitButton";
-      myExit.className = 'fas fa-times fa-2x';
-      myExit.onclick = function () {
-          document.getElementById("book" + i).remove();
-          myLibrary.splice(i, 1);
-      }
-      //const myPara3 = document.createElement('p');
-  
+        myExit.id = "exitButton";
+        myExit.className = 'fas fa-times fa-2x';
+        myExit.onclick = function () {
+            document.getElementById("book" + i).remove();
+            myLibrary.splice(i, 1);
+        }
+      const myPara3 = document.createElement('p');
+      const myLabel = document.createElement('label');
+        myLabel.className = "switch";
+        myLabel.id = "switch" + i;
+        myLabel.onclick = function() {
+            if (myInput.checked == true) {
+                myLibrary[i].read = 'read'
+            } else if (myInput.checked == false) {
+                myLibrary[i].read = 'unread';
+            }}
+      const myInput = document.createElement("input");
+        myInput.type = "checkbox";
+        myInput.id = "check" + i;
+        if (checkBox.checked == true) {
+            myInput.checked = true
+        } else if (checkBox.checked == false) {
+            myInput.checked = false;
+        }
+      const mySpan = document.createElement('span');
+        mySpan.className = "slider round"
+
       myH2.textContent = 'Author: ' + myLibrary[i].author;
       myPara1.textContent = 'Title: ' + myLibrary[i].title;
       myPara2.textContent = 'Pages: ' + myLibrary[i].pages;
+      myPara3.textContent = 'Read?';
       
       myArticle.appendChild(myH2);
       myArticle.appendChild(myPara1);
       myArticle.appendChild(myPara2);
       myArticle.appendChild(myExit);
-      //myArticle.appendChild(myPara3);
-
+      myArticle.appendChild(myPara3);
+      myArticle.appendChild(myLabel);
+      myLabel.appendChild(myInput);
+      myLabel.appendChild(mySpan);
       section.appendChild(myArticle);
   }
 }
-
 //Clears the form for a new consecutive submission
 function resetForm(event) {
     event.preventDefault();
   document.getElementById("author").value = "";
   document.getElementById("title").value = "";
   document.getElementById("pages").value = "";
+  checkBox.checked = false;
 }
 
 form.addEventListener('submit', submitForm);
@@ -79,5 +116,9 @@ span.onclick = function() {
 window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = "none";
+        document.getElementById("author").value = "";
+        document.getElementById("title").value = "";
+        document.getElementById("pages").value = "";
+        checkBox.checked = false;
     }
 }

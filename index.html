@@ -23,14 +23,20 @@
         <form id = "form" class = "formContent">
             <span class = "close"><i class="fas fa-times"></i></span>
         <h1>New Book Entry</h1>
-        <input type = "text" id = "author" placeholder = "Enter Author Name" name = "author" required>
+        <input type = "text" id = "author" 
+            placeholder = "Enter Author Name" name = "author" required>
         <br>
-        <input type = "text" id = "title" placeholder = "Enter Book Title" name = "title" required>
+        <input type = "text" id = "title" 
+            placeholder = "Enter Book Title" name = "title" required>
         <br>
-        <input type = "number" id = "pages" placeholder = "Total Pages" name = "pages" min = "1" max = "10000" required>
+        <input type = "number" id = "pages" 
+            placeholder = "Total Page #" name = "pages" min = "1" max = "10000" required>
         <br>
-        <label for = "completion">Completed?</label>
-        <input type = "checkbox" name = "completion">
+        <p>Read?</p>
+        <label id = "switch" class = "switch">
+            <input id = "mainBox" type = "checkbox">
+            <span id = "slider round" class = "slider round"></span>
+        </label>
         <br>
         <input type = "submit" name = "submission">
         </form>
