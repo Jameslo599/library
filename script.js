@@ -33,12 +33,13 @@ function submitForm(event) {
     let submission = new Book(author, title, pages, read);
     myLibrary.push(submission);
     showBooks();
+    populateStorage();
 }
 
 //Displays objects in a nice compact info 'card'. 
 //Also allows user to delete cards upon clicking the span element.
 function showBooks() {
-    for (let i = (0 + (myLibrary.length - 1)); i < myLibrary.length; i++) {
+    for (let i = (0  + (myLibrary.length - 1)); i < myLibrary.length; i++) {
         let section = document.getElementById("bookHolder");
       const myArticle = document.createElement('article');
       myArticle.id = "book" + i;
@@ -52,6 +53,7 @@ function showBooks() {
         myExit.onclick = function () {
             document.getElementById("book" + i).remove();
             myLibrary.splice(i, 1);
+            populateStorage();
         }
       const myPara3 = document.createElement('p');
       const myLabel = document.createElement('label');
@@ -122,3 +124,77 @@ window.onclick = function(event) {
         checkBox.checked = false;
     }
 }
+if (!localStorage.getItem("currentLibrary")) {
+   populateStorage();
+    } else {
+    setStyles();
+    showStoredBooks();
+}
+
+function setStyles() {
+    myLibrary = JSON.parse(localStorage.getItem("currentLibrary"));
+}
+
+
+function populateStorage() {
+    localStorage.setItem("currentLibrary", JSON.stringify(myLibrary));
+    setStyles();
+}
+
+function showStoredBooks() {
+    if (myLibrary.length == 0) {
+        return;
+    } else if (myLibrary.length >= 1) {
+    for (let i = 0; i < myLibrary.length; i++) {
+        let section = document.getElementById("bookHolder");
+      const myArticle = document.createElement('article');
+      myArticle.id = "book" + i;
+      myArticle.className = "book";
+      const myH2 = document.createElement('h2');
+      const myPara1 = document.createElement('p');
+      const myPara2 = document.createElement('p');
+      const myExit = document.createElement('i');
+        myExit.id = "exitButton";
+        myExit.className = 'fas fa-times fa-2x';
+        myExit.onclick = function () {
+            document.getElementById("book" + i).remove();
+            myLibrary.splice(i, 1);
+            populateStorage();
+        }
+      const myPara3 = document.createElement('p');
+      const myLabel = document.createElement('label');
+        myLabel.className = "switch";
+        myLabel.id = "switch" + i;
+        myLabel.onclick = function() {
+            if (myInput.checked == true) {
+                myLibrary[i].read = 'read'
+            } else if (myInput.checked == false) {
+                myLibrary[i].read = 'unread';
+            }}
+      const myInput = document.createElement("input");
+        myInput.type = "checkbox";
+        myInput.id = "check" + i;
+        if (checkBox.checked == true) {
+            myInput.checked = true
+        } else if (checkBox.checked == false) {
+            myInput.checked = false;
+        }
+      const mySpan = document.createElement('span');
+        mySpan.className = "slider round"
+
+      myH2.textContent = 'Author: ' + myLibrary[i].author;
+      myPara1.textContent = 'Title: ' + myLibrary[i].title;
+      myPara2.textContent = 'Pages: ' + myLibrary[i].pages;
+      myPara3.textContent = 'Read?';
+      
+      myArticle.appendChild(myH2);
+      myArticle.appendChild(myPara1);
+      myArticle.appendChild(myPara2);
+      myArticle.appendChild(myExit);
+      myArticle.appendChild(myPara3);
+      myArticle.appendChild(myLabel);
+      myLabel.appendChild(myInput);
+      myLabel.appendChild(mySpan);
+      section.appendChild(myArticle);
+  }
+}}
