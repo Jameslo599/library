@@ -61,17 +61,11 @@ body {
 
 #bookHolder {
     display: grid;
-    position: static;
-    grid-template-areas: 
-        ". . . ."
-        ". . . ."
-        ". . . .";
-    column-gap: 60px;
-    row-gap: 60px;
+    grid-template-columns: 
+        25% 25% 25% 25%;
+    column-gap: auto;
+    row-gap: auto;
     margin: 2%;
-    grid-template-columns: 24%;
-    -ms-grid-row-align: center;
-    -ms-grid-column-align: center;
 }
 
 .book {

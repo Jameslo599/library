@@ -12,20 +12,20 @@ firebase.initializeApp(firebaseConfig);
 
 //Array to hold book objects
 let myLibrary = [];
+//0 = localstorage is OFF, 1 = localstorage is ON
+let localStorageToggle = 0;
+//0 = firebase is OFF, 1 = firebase is ON
+let firebaseToggle = 0;
 
 //Object initializer with properties
-class Book {
-    constructor (author, title, pages, read) {
-        this.author = author;
-        this.title = title;
-        this.pages = pages;
-        this.read = read;
-    }
-    toString() {
-        return this.name + ', ' + this.state + ', ' + this.country;
-    }
+function Book(id, author, title, pages, read) {
+    this.id = id;
+    this.author = author;
+    this.title = title;
+    this.pages = pages;
+    this.read = read;
 }
-
+        
 //Pushes user-inputted info to initialize and display new object
 let form = document.getElementById("form");
 let checkBox = document.getElementById("mainBox");
@@ -35,9 +35,9 @@ readBook.onclick = function() {
     readValue = "read";
 }
 
-
 function submitForm(event) {
     event.preventDefault();
+    let id = myLibrary.length
     let author = document.getElementById("author").value;
     let title = document.getElementById("title").value;
     let pages = document.getElementById("pages").value;
@@ -47,12 +47,18 @@ function submitForm(event) {
         readValue = "read";
     }
     let read = readValue;
-    let submission = new Book(author, title, pages, read);
+    let submission = new Book(id, author, title, pages, read);
     myLibrary.push(submission);
-    //currentLibrary.push(submission);
     showBooks();
-    //populateStorage();
-    //firebaseUpdate();
+    if (localStorageToggle == 1) {
+        populateStorage();
+    } else {
+    }
+    if (firebaseToggle == 1) {
+        firebaseUpdate();
+    } else {
+        return;
+    }
 }
 
 //Displays objects in a nice compact info 'card'. 
@@ -71,10 +77,19 @@ function showBooks() {
         myExit.className = 'fas fa-times fa-2x';
         myExit.onclick = function () {
             document.getElementById("book" + i).remove();
-            //for (let i = 0; i < myLibrary.length; i++) {
-            myLibrary.splice(i, 1);//}
-            //populateStorage();
-            //firebaseUpdate();
+            let index = myLibrary.map(x => {
+                return x.id;
+              }).indexOf(i);
+            myLibrary.splice(index, 1);
+            if (localStorageToggle == 1) {
+                populateStorage();
+            } else {
+            }
+            if (firebaseToggle == 1) {
+                firebaseUpdate();
+            } else {
+                return;
+            }
         }
       const myPara3 = document.createElement('p');
       const myLabel = document.createElement('label');
@@ -83,8 +98,28 @@ function showBooks() {
         myLabel.onclick = function() {
             if (myInput.checked == true) {
                 myLibrary[i].read = 'read'
+                if (localStorageToggle == 1) {
+                    populateStorage();
+                } else {
+                    return;
+                }
+                if (firebaseToggle == 1) {
+                    firebaseUpdate();
+                } else {
+                    return;
+                }
             } else if (myInput.checked == false) {
                 myLibrary[i].read = 'unread';
+                if (localStorageToggle == 1) {
+                    populateStorage();
+                } else {
+                    return;
+                }
+                if (firebaseToggle == 1) {
+                    firebaseUpdate();
+                } else {
+                    return;
+                }
             }}
       const myInput = document.createElement("input");
         myInput.type = "checkbox";
@@ -121,7 +156,7 @@ function resetForm(event) {
   document.getElementById("pages").value = "";
   checkBox.checked = false;
 }
-
+//Triggers different functions upon clicking submit button
 form.addEventListener('submit', submitForm);
 form.addEventListener('submit', resetForm);
 
@@ -145,128 +180,176 @@ window.onclick = function(event) {
         checkBox.checked = false;
     }
 }
-//if (!localStorage.getItem("currentLibrary")) {
-//   populateStorage();
-//    } else {
-//    setStyles();
-//    showStoredBooks();
-//}
-//
-//function setStyles() {
-//    myLibrary = JSON.parse(localStorage.getItem("currentLibrary"));
-//}
-//
-//
-//function populateStorage() {
-//localStorage.setItem("currentLibrary", JSON.stringify(myLibrary));
-//    setStyles();
-//}
-//
-//function showStoredBooks() {
-//    if (myLibrary.length == 0) {
-//        return;
-//    } else if (myLibrary.length >= 1) {
-//    for (let i = 0; i < myLibrary.length; i++) {
-//        let section = document.getElementById("bookHolder");
-//      const myArticle = document.createElement('article');
-//      myArticle.id = "book" + i;
-//      myArticle.className = "book";
-//      const myH2 = document.createElement('h2');
-//      const myPara1 = document.createElement('p');
-//      const myPara2 = document.createElement('p');
-//      const myExit = document.createElement('i');
-//        myExit.id = "exitButton";
-//        myExit.className = 'fas fa-times fa-2x';
-//        myExit.onclick = function () {
-//            document.getElementById("book" + i).remove();
-//            myLibrary.splice(i, 1);
-//            populateStorage();
-//        }
-//      const myPara3 = document.createElement('p');
-//      const myLabel = document.createElement('label');
-//        myLabel.className = "switch";
-//        myLabel.id = "switch" + i;
-//        myLabel.onclick = function() {
-//            if (myInput.checked == true) {
-//                myLibrary[i].read = 'read'
-//            } else if (myInput.checked == false) {
-//                myLibrary[i].read = 'unread';
-//            }}
-//      const myInput = document.createElement("input");
-//        myInput.type = "checkbox";
-//        myInput.id = "check" + i;
-//        if (checkBox.checked == true) {
-//            myInput.checked = true
-//        } else if (checkBox.checked == false) {
-//            myInput.checked = false;
-//        }
-//      const mySpan = document.createElement('span');
-//        mySpan.className = "slider round"
-//
-//      myH2.textContent = 'Author: ' + myLibrary[i].author;
-//      myPara1.textContent = 'Title: ' + myLibrary[i].title;
-//      myPara2.textContent = 'Pages: ' + myLibrary[i].pages;
-//      myPara3.textContent = 'Read?';
-//      
-//      myArticle.appendChild(myH2);
-//      myArticle.appendChild(myPara1);
-//      myArticle.appendChild(myPara2);
-//      myArticle.appendChild(myExit);
-//      myArticle.appendChild(myPara3);
-//      myArticle.appendChild(myLabel);
-//      myLabel.appendChild(myInput);
-//      myLabel.appendChild(mySpan);
-//      section.appendChild(myArticle);
-//  }
-//}}
-//
 
-let firestore = firebase.firestore();
+//LOCALSTORAGE----------------------------------------------------
+//Upon page load, creates a "currentLibrary if there isn't one and loads "currentLibrary" if there is a saved value
+if (localStorageToggle == 1) {
+    if (!localStorage.getItem("currentLibrary")) {
+        populateStorage();
+         } else {
+         setStyles();
+         showStoredBooks();
+     }
+} else {
+}
+function setStyles() {
+    myLibrary = JSON.parse(localStorage.getItem("currentLibrary"));
+}
+function populateStorage() {
+localStorage.setItem("currentLibrary", JSON.stringify(myLibrary));
+    setStyles();
+}
+//Clears all localstorage data
+localStorage.clear();
 
-let docRef = firestore.collection("collection").doc('books');
-
-let firebaseUpdate = function() {
-    docRef.set({
-        author: "james",
-        title: "james",
-        pages: "james",
-        read: "james"
-    });
-};
-
-form.addEventListener("click", firebaseUpdate);
-window.onload = function() {
-    docRef.get('books').then(function (doc) {
-        if (doc && doc.exists) {
+//Populates saved data cards on the page and retains checkbox status
+function showStoredBooks() {
+    if (myLibrary.length == 0) {
+        return;
+    } else if (myLibrary.length >= 1) {
+    for (let i = 0; i < myLibrary.length; i++) {
+        let section = document.getElementById("bookHolder");
+      const myArticle = document.createElement('article');
+      myArticle.id = "book" + i;
+      myArticle.className = "book";
+      const myH2 = document.createElement('h2');
+      const myPara1 = document.createElement('p');
+      const myPara2 = document.createElement('p');
+      const myExit = document.createElement('i');
+        myExit.id = "exitButton";
+        myExit.className = 'fas fa-times fa-2x';
+        myExit.onclick = function () {
+            document.getElementById("book" + i).remove();
+            let index = myLibrary.map(x => {
+                return x.id;
+              }).indexOf(i);
+            myLibrary.splice(index, 1);
+            populateStorage();
         }
-    });
+      const myPara3 = document.createElement('p');
+      const myLabel = document.createElement('label');
+        myLabel.className = "switch";
+        myLabel.id = "switch" + i;
+        myLabel.onclick = function() {
+            if (myInput.checked == true) {
+                myLibrary[i].read = 'read'
+                populateStorage();
+            } else if (myInput.checked == false) {
+                myLibrary[i].read = 'unread';
+                populateStorage();
+            }}
+      const myInput = document.createElement("input");
+        myInput.type = "checkbox";
+        myInput.id = "check" + i;
+        if (myLibrary[i].read == 'read') {
+            myInput.checked = true;
+        } else if (myLibrary[i].read == 'unread') {
+            myInput.checked = false;
+        }
+      const mySpan = document.createElement('span');
+        mySpan.className = "slider round"
+
+      myH2.textContent = 'Author: ' + myLibrary[i].author;
+      myPara1.textContent = 'Title: ' + myLibrary[i].title;
+      myPara2.textContent = 'Pages: ' + myLibrary[i].pages;
+      myPara3.textContent = 'Read?';
+      
+      myArticle.appendChild(myH2);
+      myArticle.appendChild(myPara1);
+      myArticle.appendChild(myPara2);
+      myArticle.appendChild(myExit);
+      myArticle.appendChild(myPara3);
+      myArticle.appendChild(myLabel);
+      myLabel.appendChild(myInput);
+      myLabel.appendChild(mySpan);
+      section.appendChild(myArticle);
+  }
+}}
+
+//FIREBASE--------------------------------------
+//Firebase data storage pathway
+let firestore = firebase.firestore();
+let docRef = firestore.collection("collection").doc('books');
+//Converts custom objects into generic objects that can be saved on firebase
+let firebaseUpdate = function() {
+    docRef.set(
+        Object.assign({}, myLibrary.map((obj) => {return Object.assign({}, obj)}))); 
+    };
+//Loads saved firebase data upon refreshing the page
+if (firebaseToggle == 1) {
+    form.addEventListener("click", firebaseUpdate);
+    window.onload = function() {
+        docRef.get('books').then(function(doc) {
+            if (doc && doc.exists) {
+                myLibrary = Object.values(doc.data());
+                showCloudBooks();
+            }
+        });
+    }
+} else {
+}
+
+//Populates saved data cards on the page and retains checkbox status
+function showCloudBooks() {
+    for (let i = 0; i < myLibrary.length; i++) {
+        let section = document.getElementById("bookHolder");
+      const myArticle = document.createElement('article');
+      myArticle.id = "book" + i;
+      myArticle.className = "book";
+      const myH2 = document.createElement('h2');
+      const myPara1 = document.createElement('p');
+      const myPara2 = document.createElement('p');
+      const myExit = document.createElement('i');
+        myExit.id = "exitButton";
+        myExit.className = 'fas fa-times fa-2x';
+        myExit.onclick = function () {
+            let index = myLibrary.map(x => {
+                return x.id;
+              }).indexOf(i);
+            document.getElementById("book" + i).remove();
+            myLibrary.splice(index, 1);
+            firebaseUpdate();
+        }
+      const myPara3 = document.createElement('p');
+      const myLabel = document.createElement('label');
+        myLabel.className = "switch";
+        myLabel.id = "switch" + i;
+        myLabel.onclick = function() {
+            if (myInput.checked == true) {
+                myLibrary[i].read = 'read'
+                firebaseUpdate();
+            } else if (myInput.checked == false) {
+                myLibrary[i].read = 'unread';
+                firebaseUpdate();
+            }}
+      const myInput = document.createElement("input");
+        myInput.type = "checkbox";
+        myInput.id = "check" + i;
+        if (myLibrary[i].read == 'read') {
+            myInput.checked = true;
+        } else if (myLibrary[i].read == 'unread') {
+            myInput.checked = false;
+        }
+      const mySpan = document.createElement('span');
+        mySpan.className = "slider round"
+
+      myH2.textContent = 'Author: ' + myLibrary[i].author;
+      myPara1.textContent = 'Title: ' + myLibrary[i].title;
+      myPara2.textContent = 'Pages: ' + myLibrary[i].pages;
+      myPara3.textContent = 'Read?';
+      
+      myArticle.appendChild(myH2);
+      myArticle.appendChild(myPara1);
+      myArticle.appendChild(myPara2);
+      myArticle.appendChild(myExit);
+      myArticle.appendChild(myPara3);
+      myArticle.appendChild(myLabel);
+      myLabel.appendChild(myInput);
+      myLabel.appendChild(mySpan);
+      section.appendChild(myArticle);
+  }
 }
 
 
-// Firestore data converter
-var bookConverter = {
-    toFirestore: function(book) {
-        return {
-            author: book.author,
-            title: book.title,
-            pages: book.pages,
-            read: book.read,
-            };
-    },
-    fromFirestore: function(snapshot, options){
-        const data = snapshot.data(options);
-        return new Book(data.author, data.title, data.pages, data.read);
-    }
-};
 
-docRef.withConverter(bookConverter).get().then(function(doc) {
-    if (doc.exists){
-      // Convert to City object
-      var book = doc.data();
-      // Use a City instance method
-      console.log(book.toString());
-    } else {
-      console.log("No such document!");
-    }}).catch((error) => {
-      console.log("Error getting document:", error);
-    });
+
