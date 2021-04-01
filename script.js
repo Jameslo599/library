@@ -14,6 +14,13 @@ firebase.initializeApp(firebaseConfig);
 let myLibrary = [];
 //0 = localstorage is OFF, 1 = localstorage is ON
 let localStorageToggle = 0;
+let localOption = document.getElementById("localOption");
+localOption.onclick = function() {
+     
+};
+
+
+
 //0 = firebase is OFF, 1 = firebase is ON
 let firebaseToggle = 0;
 
@@ -50,10 +57,7 @@ function submitForm(event) {
     let submission = new Book(id, author, title, pages, read);
     myLibrary.push(submission);
     showBooks();
-    if (localStorageToggle == 1) {
-        populateStorage();
-    } else {
-    }
+    populateStorage();
     if (firebaseToggle == 1) {
         firebaseUpdate();
     } else {
@@ -81,10 +85,7 @@ function showBooks() {
                 return x.id;
               }).indexOf(i);
             myLibrary.splice(index, 1);
-            if (localStorageToggle == 1) {
-                populateStorage();
-            } else {
-            }
+            populateStorage();
             if (firebaseToggle == 1) {
                 firebaseUpdate();
             } else {
@@ -98,23 +99,15 @@ function showBooks() {
         myLabel.onclick = function() {
             if (myInput.checked == true) {
                 myLibrary[i].read = 'read'
-                if (localStorageToggle == 1) {
-                    populateStorage();
-                } else {
-                    return;
-                }
+                populateStorage();
                 if (firebaseToggle == 1) {
                     firebaseUpdate();
                 } else {
                     return;
                 }
             } else if (myInput.checked == false) {
-                myLibrary[i].read = 'unread';
-                if (localStorageToggle == 1) {
-                    populateStorage();
-                } else {
-                    return;
-                }
+                myLibrary[i].read = 'unread'
+                populateStorage();
                 if (firebaseToggle == 1) {
                     firebaseUpdate();
                 } else {
@@ -135,7 +128,7 @@ function showBooks() {
       myH2.textContent = 'Author: ' + myLibrary[i].author;
       myPara1.textContent = 'Title: ' + myLibrary[i].title;
       myPara2.textContent = 'Pages: ' + myLibrary[i].pages;
-      myPara3.textContent = 'Read?';
+      myPara3.textContent = 'Completed Reading?';
       
       myArticle.appendChild(myH2);
       myArticle.appendChild(myPara1);
@@ -164,7 +157,7 @@ form.addEventListener('submit', resetForm);
 //deactivated when clicking on span element or outside of modal
 let modal = document.getElementById("modalContainer");
 let button = document.getElementById("newBook");
-let span = document.getElementsByClassName("close")[0];
+let span = document.getElementsByClassName("close")[1];
 button.onclick = function() {
     modal.style.display = "block";
 }
@@ -181,17 +174,24 @@ window.onclick = function(event) {
     }
 }
 
+let storageModal = document.getElementById("modalStorageContainer");
+let storageSpan = document.getElementsByClassName("close")[0];
+window.onload = function() {
+    storageModal.style.display = "block"
+}
+storageSpan.onclick = function() {
+    storageModal.style.display = "none";
+}
+
 //LOCALSTORAGE----------------------------------------------------
 //Upon page load, creates a "currentLibrary if there isn't one and loads "currentLibrary" if there is a saved value
-if (localStorageToggle == 1) {
-    if (!localStorage.getItem("currentLibrary")) {
-        populateStorage();
-         } else {
-         setStyles();
-         showStoredBooks();
-     }
-} else {
-}
+if (!localStorage.getItem("currentLibrary")) {
+    populateStorage();
+ } else {
+        setStyles();
+        showStoredBooks();
+};
+
 function setStyles() {
     myLibrary = JSON.parse(localStorage.getItem("currentLibrary"));
 }
@@ -199,8 +199,14 @@ function populateStorage() {
 localStorage.setItem("currentLibrary", JSON.stringify(myLibrary));
     setStyles();
 }
-//Clears all localstorage data
-localStorage.clear();
+//Button to clear all localstorage data
+let buttonContainer = document.querySelector("#buttonContainer");
+let clearButton = document.createElement("button");
+localOption.onclick = function() {
+    clearButton.textContent = "Clear Save Data";
+    buttonContainer.appendChild(clearButton);
+    clearButton.addEventListener("onclick", localStorage.clear());
+    };
 
 //Populates saved data cards on the page and retains checkbox status
 function showStoredBooks() {
@@ -252,7 +258,7 @@ function showStoredBooks() {
       myH2.textContent = 'Author: ' + myLibrary[i].author;
       myPara1.textContent = 'Title: ' + myLibrary[i].title;
       myPara2.textContent = 'Pages: ' + myLibrary[i].pages;
-      myPara3.textContent = 'Read?';
+      myPara3.textContent = 'Completed Reading?';
       
       myArticle.appendChild(myH2);
       myArticle.appendChild(myPara1);
@@ -333,10 +339,10 @@ function showCloudBooks() {
       const mySpan = document.createElement('span');
         mySpan.className = "slider round"
 
-      myH2.textContent = 'Author: ' + myLibrary[i].author;
-      myPara1.textContent = 'Title: ' + myLibrary[i].title;
-      myPara2.textContent = 'Pages: ' + myLibrary[i].pages;
-      myPara3.textContent = 'Read?';
+      myH2.textContent = "Author: " + myLibrary[i].author;
+      myPara1.textContent = "Title: " + myLibrary[i].title;
+      myPara2.textContent = "Pages: " + myLibrary[i].pages;
+      myPara3.textContent = "Completed Reading?";
       
       myArticle.appendChild(myH2);
       myArticle.appendChild(myPara1);

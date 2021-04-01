@@ -19,6 +19,12 @@
             Add New Book
         </button>
     </div>
+    <div id = "modalStorageContainer" class = "storageModal">
+        <span class = "close"><i class="fas fa-times"></i></span>
+        <h1>Select Storage Method:</h1>
+        <button id = "firebaseOption">Cloud</button>
+        <button id = "localOption">Local</button>
+    </div>
     <div id = "modalContainer" class = "modal">
         <form id = "form" class = "formContent">
             <span class = "close"><i class="fas fa-times"></i></span>
@@ -38,7 +44,7 @@
             <span id = "slider round" class = "slider round"></span>
         </label>
         <br>
-        <input type = "submit" name = "submission">
+        <input id = "submitButton" type = "submit" name = "submission">
         </form>
     </div>
     <section id = "bookHolder"></section>
