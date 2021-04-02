@@ -289,7 +289,7 @@ body {
     font-weight: 600;
 }
 #bookHolder h2, p{ 
-    overflow: hidden;
+    overflow: hidden !important;
 }
 
 #bookHolder #exitButton {
