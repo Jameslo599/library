@@ -77,6 +77,8 @@ body {
     height: 100%;
     overflow: auto;
     background-color: gray;
+    align-content: center;
+    justify-content: center;
 }
 
 .storageModal h1 {
