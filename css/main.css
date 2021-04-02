@@ -6,6 +6,7 @@ body {
     background: rgb(238,174,202);
     background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
 }
+
 #titles {
     font-family: 'Cambria', sans-serif;
     font-size: 1.5em;
@@ -13,6 +14,7 @@ body {
     color: rgb(238, 234, 234);
     text-shadow: 0 0.04em 0.04em rgba(0,00,0,0.35);
 }
+
 #newBook {
     margin: 0 1em 2em 0;
     border: 0.16em solid rgba(255,255,255,0);
@@ -27,9 +29,11 @@ body {
     transition: all 0.2s;
     background-color:#9a4ef1;
 }
+
 #newBook:hover {
     border-color:rgba(148,187,233,1);
 }
+
 .modal {
     display: none;
     position: fixed;
@@ -114,6 +118,7 @@ body {
     margin: 5px;
     vertical-align: middle;
 }
+
 #firebaseOption span {
     cursor: pointer;
     display: inline-block;
@@ -278,6 +283,7 @@ body {
     align-items: center;
     font-family: 'Cambria', sans-serif;
     color: white;
+    font-size: 18px;
 }
 .book {
     font-weight: 600;
