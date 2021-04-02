@@ -12,14 +12,9 @@ firebase.initializeApp(firebaseConfig);
 
 //Array to hold book objects
 let myLibrary = [];
-//0 = localstorage is OFF, 1 = localstorage is ON
+
+//0 = localStorage is OFF, 1 = localStorage is ON
 let localStorageToggle = 0;
-let localOption = document.getElementById("localOption");
-localOption.onclick = function() {
-     
-};
-
-
 
 //0 = firebase is OFF, 1 = firebase is ON
 let firebaseToggle = 0;
@@ -57,7 +52,9 @@ function submitForm(event) {
     let submission = new Book(id, author, title, pages, read);
     myLibrary.push(submission);
     showBooks();
+    if (localStorageToggle == 1) {
     populateStorage();
+    } else {};
     if (firebaseToggle == 1) {
         firebaseUpdate();
     } else {
@@ -85,7 +82,9 @@ function showBooks() {
                 return x.id;
               }).indexOf(i);
             myLibrary.splice(index, 1);
-            populateStorage();
+            if (localStorageToggle == 1) {
+                populateStorage();
+                } else {};
             if (firebaseToggle == 1) {
                 firebaseUpdate();
             } else {
@@ -99,7 +98,9 @@ function showBooks() {
         myLabel.onclick = function() {
             if (myInput.checked == true) {
                 myLibrary[i].read = 'read'
-                populateStorage();
+                if (localStorageToggle == 1) {
+                    populateStorage();
+                    } else {};
                 if (firebaseToggle == 1) {
                     firebaseUpdate();
                 } else {
@@ -107,7 +108,9 @@ function showBooks() {
                 }
             } else if (myInput.checked == false) {
                 myLibrary[i].read = 'unread'
-                populateStorage();
+                if (localStorageToggle == 1) {
+                    populateStorage();
+                    } else {};
                 if (firebaseToggle == 1) {
                     firebaseUpdate();
                 } else {
@@ -185,13 +188,6 @@ storageSpan.onclick = function() {
 
 //LOCALSTORAGE----------------------------------------------------
 //Upon page load, creates a "currentLibrary if there isn't one and loads "currentLibrary" if there is a saved value
-if (!localStorage.getItem("currentLibrary")) {
-    populateStorage();
- } else {
-        setStyles();
-        showStoredBooks();
-};
-
 function setStyles() {
     myLibrary = JSON.parse(localStorage.getItem("currentLibrary"));
 }
@@ -199,14 +195,29 @@ function populateStorage() {
 localStorage.setItem("currentLibrary", JSON.stringify(myLibrary));
     setStyles();
 }
+
+//Utilizes localStorage when local button is pressed
+let localOption = document.getElementById("localOption");
+localOption.onclick = function() {
+    localStorageToggle = 1;
+    if (!localStorage.getItem("currentLibrary")) {
+        populateStorage();
+     } else {
+            setStyles();
+            showStoredBooks();
+    };
+    storageModal.style.display = "none";
+};
+
 //Button to clear all localstorage data
 let buttonContainer = document.querySelector("#buttonContainer");
 let clearButton = document.createElement("button");
-localOption.onclick = function() {
-    clearButton.textContent = "Clear Save Data";
-    buttonContainer.appendChild(clearButton);
-    clearButton.addEventListener("onclick", localStorage.clear());
-    };
+clearButton.id = "localButton";
+clearButton.textContent = "Clear Local Save Data";
+buttonContainer.appendChild(clearButton);
+clearButton.onclick = function() {
+    localStorage.clear();
+}
 
 //Populates saved data cards on the page and retains checkbox status
 function showStoredBooks() {
@@ -276,24 +287,40 @@ function showStoredBooks() {
 //Firebase data storage pathway
 let firestore = firebase.firestore();
 let docRef = firestore.collection("collection").doc('books');
+
 //Converts custom objects into generic objects that can be saved on firebase
 let firebaseUpdate = function() {
     docRef.set(
         Object.assign({}, myLibrary.map((obj) => {return Object.assign({}, obj)}))); 
     };
+
 //Loads saved firebase data upon refreshing the page
 if (firebaseToggle == 1) {
     form.addEventListener("click", firebaseUpdate);
-    window.onload = function() {
-        docRef.get('books').then(function(doc) {
-            if (doc && doc.exists) {
-                myLibrary = Object.values(doc.data());
-                showCloudBooks();
-            }
-        });
-    }
-} else {
-}
+    } else {};
+
+//Utilizes firebase when cloud button is pressed
+let firebaseOption = document.getElementById("firebaseOption");
+firebaseOption.onclick = function() {
+    firebaseToggle = 1;
+    docRef.get('books').then(function(doc) {
+        if (doc && doc.exists) {
+            myLibrary = Object.values(doc.data());
+            showCloudBooks();
+        }
+    });
+    storageModal.style.display = "none";
+};
+
+//Button to clear all firebase data
+//let buttonContainer = document.querySelector("#buttonContainer");
+let clearFireButton = document.createElement("button");
+clearFireButton.id = "localFireButton";
+clearFireButton.textContent = "Clear Cloud Save Data";
+buttonContainer.appendChild(clearFireButton);
+clearFireButton.onclick = function() {
+    docRef.delete();
+};
 
 //Populates saved data cards on the page and retains checkbox status
 function showCloudBooks() {
