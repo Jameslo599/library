@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-signin-client_id" content="718828069371-lgd94u6mkl72s7rpduvljubns32rk394.apps.googleusercontent.com">
+    <meta name="google-signin-cookiepolicy" content="single_host_origin">
+    <meta name="google-signin-scope" content="profile email">
     <title>Library</title>
 </head>
 <body>
@@ -22,6 +25,7 @@
     <div id = "modalStorageContainer" class = "storageModal">
         <span class = "close"><i class="fas fa-times" id = "storageExit"></i></span>
         <h1>Select Storage Method:</h1>
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
         <button id = "localOption">Local<span></span></button>
         <button id = "firebaseOption">Cloud<span></span></button>
     </div>
@@ -52,11 +56,18 @@
 <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js">
     const firebase = require("firebase");
     // Required for side-effects
-    require("firebase/firestore");</script>
+    require("firebase/firestore");
+    require("firebase/auth");</script>
+<script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-auth.js">
+    const firebase = require("firebase");
+    // Required for side-effects
+    require("firebase/firestore");
+    require("firebase/auth");</script>
 <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-firestore.js">
     const firebase = require("firebase");
     // Required for side-effects
     require("firebase/firestore");
-</script>
+    require("firebase/auth");</script>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
 <script src="script.js"></script>
 </html>

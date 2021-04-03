@@ -1,5 +1,5 @@
 // Initialize Firebase
-var firebaseConfig = {
+let firebaseConfig = {
     apiKey: "AIzaSyB4WMy4-NheIwgYpHsm4tqCMBZBD3y7of0",
     authDomain: "library-fcf5c.firebaseapp.com",
     projectId: "library-fcf5c",
@@ -8,6 +8,7 @@ var firebaseConfig = {
     appId: "1:718828069371:web:efd83ed34f06a43288eb5e",
     measurementId: "G-436GMWQC49"
 };
+
 firebase.initializeApp(firebaseConfig);
 
 //Array to hold book objects
@@ -383,6 +384,59 @@ function showCloudBooks() {
   }
 }
 
+function onSignIn(googleUser) {
+    console.log('Google Auth Response', googleUser);
+    // We need to register an Observer on Firebase Auth to make sure auth is initialized.
+    var unsubscribe = firebase.auth().onAuthStateChanged((firebaseUser) => {
+      unsubscribe();
+      // Check if we are already signed-in Firebase with the correct user.
+      if (!isUserEqual(googleUser, firebaseUser)) {
+        // Build Firebase credential with the Google ID token.
+        var credential = firebase.auth.GoogleAuthProvider.credential(
+            googleUser.getAuthResponse().id_token);
+        // Sign in with credential from the Google user.
+        firebase.auth().signInWithCredential(credential).catch((error) => {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          // The email of the user's account used.
+          var email = error.email;
+          // The firebase.auth.AuthCredential type that was used.
+          var credential = error.credential;
+          // ...
+        });
+      } else {
+        console.log('User already signed-in Firebase.');
+      }
+    });
+}
 
+  function isUserEqual(googleUser, firebaseUser) {
+    if (firebaseUser) {
+      let providerData = firebaseUser.providerData;
+      for (let i = 0; i < providerData.length; i++) {
+        if (providerData[i].providerId === firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
+            providerData[i].uid === googleUser.getBasicProfile().getId()) {
+          // We don't need to reauth the Firebase connection.
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 
+ // function signOut() {
+ //     firebase.auth().signOut().then(() => {
+ //   // Sign-out successful.
+ // }).catch((error) => {
+ //   // An error happened.
+ // });}
+
+  function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    firebase.auth().signOut();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+  }
 
