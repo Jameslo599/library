@@ -209,7 +209,8 @@ localOption.onclick = function() {
             showStoredBooks();
     };
     storageModal.style.display = "none";
-    populateSignOut();
+    if (signInStatus == true) {
+    populateSignOut();}
 };
 
 //Button to clear all localstorage data
@@ -450,12 +451,8 @@ function isUserEqual(googleUser, firebaseUser) {
 
 //Signs user out of account
 function signOut() {
-    let newWindow = window.open('https://mail.google.com/mail/?logout&hl=fr','Disconnect from Google','width=100,height=50,menubar=no,status=no,location=no,toolbar=no,scrollbars=no,top=200,left=200');
-    setTimeout = function() {
-        if (newWindow) { 
-            newWindow.close();
-            //window.location="localhost:5500";
-            } 3000;
+    var newWindow = window.open('https://mail.google.com/mail/?logout&hl=fr','Disconnect from Google','width=100,height=50,menubar=no,status=no,location=no,toolbar=no,scrollbars=no,top=200,left=200');
+    newWindow.close();
     let auth2 = gapi.auth2.getAuthInstance();
     firebase.auth().signOut();
     auth2.signOut().then(function () {
@@ -463,7 +460,6 @@ function signOut() {
     });
     logSuccess = 0;
     signInStatus = false;
-    };
     self.location.reload()
 };
 

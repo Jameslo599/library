@@ -8,20 +8,25 @@ body {
 }
 
 #titles {
-    position: static;
     font-family: 'Cambria', sans-serif;
     font-size: 1.5em;
     height: 5em;
-    padding-left: 2.2em;
     color: rgb(238, 234, 234);
     text-shadow: 0 0.2em 0.04em rgba(0,00,0,0.35);
 }
 
+#library {
+    text-align: center;
+    position: fixed;
+    padding-left: 15.5em;
+}
+
 #signOutButton {
-    position: static;
+    position: absolute;
     float: right;
     vertical-align: top;
-    margin: 1em 1em 1em 1em;
+    margin-left: 38em;
+    margin-top: 2.1em;
     border: 0.16em solid rgba(255,255,255,0);
     box-sizing: border-box;
     text-decoration: none;
