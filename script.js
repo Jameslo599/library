@@ -302,7 +302,9 @@ if (firebaseToggle == 1) {
 
 //Utilizes firebase when cloud button is pressed
 let firebaseOption = document.getElementById("firebaseOption");
+let logSuccess = 0;
 firebaseOption.onclick = function() {
+    if (logSuccess == 1) {
     firebaseToggle = 1;
     docRef.get('books').then(function(doc) {
         if (doc && doc.exists) {
@@ -311,7 +313,10 @@ firebaseOption.onclick = function() {
         }
     });
     storageModal.style.display = "none";
-};
+} else {
+    alert("Please sign into Google")
+    };
+}
 
 //Button to clear all firebase data
 //let buttonContainer = document.querySelector("#buttonContainer");
@@ -384,7 +389,9 @@ function showCloudBooks() {
   }
 }
 
-function onSignIn(googleUser) {
+function onSignIn() {
+    let googleUser = gapi.auth2.getAuthInstance().currentUser.get();
+    let profile = googleUser.getBasicProfile();
     console.log('Google Auth Response', googleUser);
     // We need to register an Observer on Firebase Auth to make sure auth is initialized.
     let unsubscribe = firebase.auth().onAuthStateChanged((firebaseUser) => {
@@ -405,13 +412,16 @@ function onSignIn(googleUser) {
           let credential = error.credential;
           // ...
         });
-        let profile = googleUser.getBasicProfile();
         console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
         console.log('Name: ' + profile.getName());
         console.log('Image URL: ' + profile.getImageUrl());
         console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+        logSuccess = 1;
+        docRef = firestore.collection('users').doc(profile.getId());
       } else {
         console.log('User already signed-in Firebase.');
+        logSuccess = 1;
+        docRef = firestore.collection('users').doc(profile.getId());  
       }
     });
 }
@@ -431,18 +441,28 @@ function isUserEqual(googleUser, firebaseUser) {
   }
 
 function signOut() {
+    let newWindow = window.open('https://mail.google.com/mail/?logout&hl=fr','Disconnect from Google','width=100,height=50,menubar=no,status=no,location=no,toolbar=no,scrollbars=no,top=200,left=200');
+    setTimeout = function() {
+        if (newWindow) { 
+            newWindow.close();
+            //window.location="localhost:5500";
+            } 3000;
     let auth2 = gapi.auth2.getAuthInstance();
     firebase.auth().signOut();
     auth2.signOut().then(function () {
         console.log('User signed out.');
     });
-}
+    logSuccess = 0;
+    };
+    self.location.reload()
+};
 
-let newWindow = window.open('https://mail.google.com/mail/?logout&hl=fr','Disconnect from Google','width=100,height=50,menubar=no,status=no,location=no,toolbar=no,scrollbars=no,top=200,left=200');
-setTimeout(function(){
-    if (newWindow) newWindow.close();
-    window.location="localhost:5500";
-},3000);
-
-
-
+function renderButton() {
+    gapi.signin2.render('my-signin2', {
+      'scope': 'profile email',
+      'width': 240,
+      'height': 50,
+      'longtitle': true,
+      'theme': 'dark',
+      'onsuccess': 'onSignIn'
+    })};
