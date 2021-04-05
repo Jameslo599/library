@@ -8,11 +8,38 @@ body {
 }
 
 #titles {
+    position: static;
     font-family: 'Cambria', sans-serif;
     font-size: 1.5em;
-    padding-right: 2.7em;
+    height: 5em;
+    padding-left: 2.2em;
     color: rgb(238, 234, 234);
+    text-shadow: 0 0.2em 0.04em rgba(0,00,0,0.35);
+}
+
+#signOutButton {
+    position: static;
+    float: right;
+    vertical-align: top;
+    margin: 1em 1em 1em 1em;
+    border: 0.16em solid rgba(255,255,255,0);
+    box-sizing: border-box;
+    text-decoration: none;
+    height: 2em;
+    font-family: 'Cambria', sans-serif;
+    font-size: 0.8em;
+    font-weight: 700;
+    color:rgb(238, 234, 234);
     text-shadow: 0 0.04em 0.04em rgba(0,00,0,0.35);
+    text-align: center;
+    transition: all 0.2s;
+    background-color:#6a4add;
+    box-shadow: 0 0.49em 0.44em rgba(0, 0, 0, 0.35);
+}
+
+#signOutButton:hover {
+    border-color:rgb(238,174,202);
+    cursor: pointer;
 }
 
 #newBook {
@@ -24,14 +51,16 @@ body {
     font-family: 'Cambria', sans-serif;
     font-weight: 700;
     color:rgb(238, 234, 234);
-    text-shadow: 0 0.04em 0.04em rgba(0,00,0,0.35);
+    text-shadow: 0 0.04em 0.04em rgba(0,0,0,0.35);
     text-align: center;
     transition: all 0.2s;
     background-color:#9a4ef1;
+    box-shadow: 0 0.49em 0.44em rgba(0, 0, 0, 0.35);
 }
 
 #newBook:hover {
     border-color:rgba(148,187,233,1);
+    cursor: pointer;
 }
 
 .modal {
@@ -88,11 +117,12 @@ body {
 .storageModal h1 {
     padding-top: 1.5em;
     padding-bottom: 2em;
-    padding-left: 1.6em;
     font-family: 'Cambria', sans-serif;
     font-size: 2em;
     color: rgb(238, 234, 234);
+    background-color: rgba(14, 133, 245, 0.76);
     text-shadow: 0 0.04em 0.04em rgba(0,00,0,0.35);
+    box-shadow: 0 0.49em 0.44em rgba(0, 0, 0, 0.2);
     text-align: center;
 }
 
@@ -117,6 +147,7 @@ body {
     cursor: pointer;
     margin: 5px;
     vertical-align: middle;
+    box-shadow: 0 0.49em 0.44em rgba(0, 0, 0, 0.35);
 }
 
 #firebaseOption span {
@@ -241,10 +272,12 @@ body {
     text-align: center;
     transition: all 0.2s;
     background-color:#b85708;
+    box-shadow: 0 0.49em 0.44em rgba(0, 0, 0, 0.35);
 }
 
 #localButton:hover {
     border-color:rgba(148,187,233,1);
+    cursor: pointer;
 }
 
 #localFireButton {
@@ -260,10 +293,12 @@ body {
     text-align: center;
     transition: all 0.2s;
     background-color:#198b3f;
+    box-shadow: 0 0.49em 0.44em rgba(0, 0, 0, 0.35);
 }
 
 #localFireButton:hover {
     border-color:rgba(148,187,233,1);
+    cursor: pointer;
 }
 
 #bookHolder {
@@ -387,3 +422,4 @@ body {
     margin-top: -0.5em;
     margin-bottom: -0.25em;
 }
+

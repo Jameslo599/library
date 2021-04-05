@@ -14,24 +14,24 @@
         <link href="css/main.css" rel="stylesheet" type="text/css" media="all">
         <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
     </header>
+    <div id = "modalStorageContainer" class = "storageModal">
+        <h1>Select Storage Method</h1>
+        <button id = "localOption">Local<span></span></button>
+        <div id = "my-signin2"></div>
+        <button id = "firebaseOption">Cloud<span></span></button>
+    </div>
     <div id = "titles">
-        <h1>Library</h1>
+
+        <h1 id = "library">Library</h1>
     </div>
     <div id = "buttonContainer">
         <button id = "newBook">
             Add New Book
         </button>
     </div>
-    <div id = "modalStorageContainer" class = "storageModal">
-        <span class = "close"><i class="fas fa-times" id = "storageExit"></i></span>
-        <h1>Select Storage Method:</h1>
-        <button id = "localOption">Local<span></span></button>
-        <div id = "my-signin2"></div>
-        <button id = "firebaseOption">Cloud<span></span></button>
-    </div>
     <div id = "modalContainer" class = "modal">
         <form id = "form" class = "formContent">
-            <span class = "close"><i class="fas fa-times"></i></span>
+            <span id = "close" class = "close"><i class="fas fa-times"></i></span>
         <h1>New Book Entry</h1>
         <input type = "text" id = "author" 
             placeholder = "Enter Author Name" name = "author" required>

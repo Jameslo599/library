@@ -20,6 +20,9 @@ let localStorageToggle = 0;
 //0 = firebase is OFF, 1 = firebase is ON
 let firebaseToggle = 0;
 
+//Is user signed in
+let signInStatus = false;
+
 //Object initializer with properties
 function Book(id, author, title, pages, read) {
     this.id = id;
@@ -161,13 +164,14 @@ form.addEventListener('submit', resetForm);
 //deactivated when clicking on span element or outside of modal
 let modal = document.getElementById("modalContainer");
 let button = document.getElementById("newBook");
-let span = document.getElementsByClassName("close")[1];
+let span = document.getElementById("close");
 button.onclick = function() {
     modal.style.display = "block";
-}
+};
 span.onclick = function() {
     modal.style.display = "none";
-}
+};
+
 window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = "none";
@@ -179,13 +183,10 @@ window.onclick = function(event) {
 }
 
 let storageModal = document.getElementById("modalStorageContainer");
-let storageSpan = document.getElementsByClassName("close")[0];
 window.onload = function() {
     storageModal.style.display = "block"
 }
-storageSpan.onclick = function() {
-    storageModal.style.display = "none";
-}
+
 
 //LOCALSTORAGE----------------------------------------------------
 //Upon page load, creates a "currentLibrary if there isn't one and loads "currentLibrary" if there is a saved value
@@ -208,6 +209,7 @@ localOption.onclick = function() {
             showStoredBooks();
     };
     storageModal.style.display = "none";
+    populateSignOut();
 };
 
 //Button to clear all localstorage data
@@ -316,6 +318,9 @@ firebaseOption.onclick = function() {
 } else {
     alert("Please sign into Google")
     };
+    if (signInStatus == true) {
+        populateSignOut();
+    };
 }
 
 //Button to clear all firebase data
@@ -417,15 +422,18 @@ function onSignIn() {
         console.log('Image URL: ' + profile.getImageUrl());
         console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
         logSuccess = 1;
+        signInStatus = true;
         docRef = firestore.collection('users').doc(profile.getId());
       } else {
         console.log('User already signed-in Firebase.');
         logSuccess = 1;
+        signInStatus = true;
         docRef = firestore.collection('users').doc(profile.getId());  
       }
     });
 }
 
+//Checks if the googleuser is the same as firebase user
 function isUserEqual(googleUser, firebaseUser) {
     if (firebaseUser) {
       let providerData = firebaseUser.providerData;
@@ -440,6 +448,7 @@ function isUserEqual(googleUser, firebaseUser) {
     return false;
   }
 
+//Signs user out of account
 function signOut() {
     let newWindow = window.open('https://mail.google.com/mail/?logout&hl=fr','Disconnect from Google','width=100,height=50,menubar=no,status=no,location=no,toolbar=no,scrollbars=no,top=200,left=200');
     setTimeout = function() {
@@ -453,10 +462,27 @@ function signOut() {
         console.log('User signed out.');
     });
     logSuccess = 0;
+    signInStatus = false;
     };
     self.location.reload()
 };
 
+populateSignOut = function() {
+    let signOutButton = document.createElement("button");
+    signOutButton.textContent = "Sign Out"
+    signOutButton.onclick = function() {
+        signOut();
+    }
+    let titles = document.getElementById("titles");
+    let library = document.getElementById("library");
+    signOutButton.id = "signOutButton";
+    titles.insertBefore(signOutButton, library);   
+};
+
+if (signInStatus == true) {
+    populateSignOut();
+};
+//Google sign-in button styling
 function renderButton() {
     gapi.signin2.render('my-signin2', {
       'scope': 'profile email',
