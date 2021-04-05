@@ -17,8 +17,8 @@ body {
 
 #library {
     text-align: center;
-    position: fixed;
-    padding-left: 15.5em;
+    position: relative;
+    padding-right: 2em;
 }
 
 #signOutButton {
