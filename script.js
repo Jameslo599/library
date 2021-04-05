@@ -451,7 +451,7 @@ function isUserEqual(googleUser, firebaseUser) {
 
 //Signs user out of account
 function signOut() {
-    var newWindow = window.open('https://mail.google.com/mail/?logout&hl=fr','Disconnect from Google','width=100,height=50,menubar=no,status=no,location=no,toolbar=no,scrollbars=no,top=200,left=200');
+    let newWindow = window.open('https://mail.google.com/mail/?logout&hl=fr','Disconnect from Google','width=100,height=50,menubar=no,status=no,location=no,toolbar=no,scrollbars=no,top=200,left=200');
     newWindow.close();
     let auth2 = gapi.auth2.getAuthInstance();
     firebase.auth().signOut();
