@@ -24,13 +24,15 @@ let firebaseToggle = 0;
 let signInStatus = false;
 
 //Object initializer with properties
-function Book(id, author, title, pages, read) {
-    this.id = id;
-    this.author = author;
-    this.title = title;
-    this.pages = pages;
-    this.read = read;
-}
+class Book {
+    constructor(id, author, title, pages, read) {
+        this.id = id;
+        this.author = author;
+        this.title = title;
+        this.pages = pages;
+        this.read = read;
+    }
+};
         
 //Pushes user-inputted info to initialize and display new object
 let form = document.getElementById("form");
